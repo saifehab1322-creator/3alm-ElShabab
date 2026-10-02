@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تواصل معنا — عالم الشباب</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .contact-layout {
+      position: relative; z-index: 1;
+      max-width: 960px; margin: 0 auto;
+      padding: 80px 40px 120px;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .contact-form-panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .cfp-head {
+      padding: 28px 32px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,230,118,0.04);
+    }
+
+    .cfp-head h1 {
+      font-family: var(--font-display);
+      font-size: 2rem; font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .cfp-head p { font-size: 0.86rem; color: var(--text-muted); }
+
+    .cfp-body {
+      padding: 32px;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+
+    .form-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    }
+
+    /* INFO SIDEBAR */
+    .contact-info {
+      display: flex; flex-direction: column; gap: 16px;
+      position: sticky;
+      top: calc(var(--nav-h) + 20px);
+    }
+
+    .info-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 26px;
+    }
+
+    .info-card h3 {
+      font-family: var(--font-display);
+      font-size: 0.9rem; font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .info-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .info-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .info-item-icon {
+      width: 36px; height: 36px;
+      background: var(--green-glow);
+      border: 1px solid var(--green-border);
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .info-item-text .label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 3px;
+    }
+
+    .info-item-text .value {
+      font-size: 0.88rem;
+      color: var(--text-dim);
+    }
+
+    .success-msg {
+      display: none;
+      padding: 16px 20px;
+      background: var(--green-glow);
+      border: 1px solid var(--green-border);
+      border-radius: var(--radius-sm);
+      color: var(--green);
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+
+    @media (max-width: 820px) {
+      .contact-layout { grid-template-columns: 1fr; padding: 40px 20px 80px; }
+      .contact-info { position: static; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- ════ MOBILE OVERLAY ════ -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <!-- ════ MOBILE HAMBURGER ════ -->
+  <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleSidebar()" aria-label="القائمة">
+    <span></span><span></span><span></span>
+  </button>
+
+  <!-- ════ MOBILE BOTTOM NAV ════ -->
+  <nav class="mobile-bottom-nav">
+    <div class="bottom-nav-items">
+      <a href="index.html" class="bottom-nav-item">
+        <i class="fa-solid fa-house"></i>
+        <span>الرئيسية</span>
+      </a>
+      <a href="stadium.html" class="bottom-nav-item">
+        <i class="fa-solid fa-futbol"></i>
+        <span>الملاعب</span>
+      </a>
+      <a href="booking.html" class="bottom-nav-item">
+        <i class="fa-regular fa-calendar-check"></i>
+        <span>الحجز</span>
+      </a>
+      <a href="my-booking.html" class="bottom-nav-item">
+        <i class="fa-solid fa-calendar-days"></i>
+        <span>حجوزاتي</span>
+      </a>
+      <button class="bottom-nav-item" onclick="toggleSidebar()">
+        <i class="fa-solid fa-bars"></i>
+        <span>المزيد</span>
+      </button>
+    </div>
+  </nav>
+
+       <!-- ════ SIDEBAR ════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <i class="fa-solid fa-futbol" style="color:#0a0f0d;"></i>
+      </div>
+      <div class="logo-text">
+        3ALM ELSHABAB
+        <span>منصة حجز الملاعب</span>
+      </div>
+    </div>
+
+    <span class="nav-section-label" data-i18n="القائمة">القائمة</span>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="index.html"><i class="fa-solid fa-house"></i> <span data-i18n="الرئيسية">الرئيسية</span></a></li>
+      <li class="nav-item"><a href="stadium.html"><i class="fa-solid fa-futbol"></i> <span data-i18n="الملاعب">الملاعب</span></a></li>
+      <li class="nav-item"><a href="booking.html"><i class="fa-regular fa-calendar-check"></i> <span data-i18n="الحجز">الحجز</span></a></li>
+    </ul>
+
+    <span class="nav-section-label" data-i18n="الحساب" style="margin-top:8px;">الحساب</span>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="profile.html"><i class="fa-regular fa-user"></i> <span data-i18n="حسابي">حسابي</span></a></li>
+      <li class="nav-item"><a href="my-booking.html"><i class="fa-solid fa-calendar-days"></i> <span data-i18n="حجوزاتي">حجوزاتي</span></a></li>
+      <li class="nav-item"><a href="login.html"><i class="fa-solid fa-right-to-bracket"></i> <span data-i18n="تسجيل الدخول">تسجيل الدخول</span></a></li>
+      <li class="nav-item"><a href="contact.html"><i class="fa-regular fa-envelope"></i> <span data-i18n="تواصل">تواصل</span></a></li>
+      <li class="nav-item"><a href="about.html"><i class="fa-solid fa-circle-info"></i> <span data-i18n="عنا">عنا</span></a></li>
+    </ul>
+
+    <div style="margin-top:auto;display:flex;flex-direction:column;gap:8px;">
+      <!-- Language Toggle -->
+      <button class="theme-toggle" onclick="toggleLang()" style="width:100%;cursor:pointer;">
+        <div class="theme-toggle-label">
+          <span style="font-size:1rem;">🌐</span>
+          <span class="lang-toggle-text">English</span>
+        </div>
+        <div style="font-size:0.65rem;opacity:0.6;letter-spacing:1px;">AR / EN</div>
+      </button>
+
+      <!-- Theme Toggle -->
+      <button class="theme-toggle" onclick="toggleTheme()" style="width:100%;cursor:pointer;">
+        <div class="theme-toggle-label">
+          <span class="theme-toggle-icon">🌙</span>
+          <span class="theme-toggle-text" data-i18n="الوضع النهاري">الوضع النهاري</span>
+        </div>
+        <div class="theme-toggle-switch"></div>
+      </button>
+    </div>
+  </aside>
+
+<div class="contact-layout">
+
+  <!-- FORM -->
+  <div class="contact-form-panel">
+    <div class="cfp-head">
+      <p class="section-label" style="margin-bottom:10px;">تواصل معنا</p>
+      <h1><span data-i18n="تواصل معنا">تواصل معنا</span> 📞</h1>
+      <p>إذا كان لديك أي أسئلة أو ملاحظات، يسعدنا سماعك.</p>
+    </div>
+
+    <div class="cfp-body">
+      <div id="successMsg" class="success-msg">
+        ✅ تم إرسال رسالتك! سنرد عليك خلال 24 ساعة.
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>اسمك</label>
+          <input type="text" id="c-name" placeholder="أدخل اسمك" required>
+        </div>
+        <div class="form-group">
+          <label>البريد الإلكتروني</label>
+          <input type="email" id="c-email" placeholder="you@example.com" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>الموضوع</label>
+        <select>
+          <option value="">اختر موضوعاً…</option>
+          <option>مشكلة في الحجز</option>
+          <option>مشكلة في الدفع</option>
+          <option>استفسار عن ملعب</option>
+          <option>مساعدة في الحساب</option>
+          <option>أخرى</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>الرسالة</label>
+        <textarea id="c-msg" rows="5" placeholder="اكتب رسالتك هنا…" required style="resize:vertical;"></textarea>
+      </div>
+
+      <button class="btn-primary" style="padding:16px;" onclick="sendالرسالة()">
+        Send الرسالة →
+      </button>
+    </div>
+  </div>
+
+  <!-- INFO -->
+  <div class="contact-info">
+    <div class="info-card">
+      <h3><span data-i18n="معلومات التواصل">معلومات التواصل</span></h3>
+
+      <div class="info-item">
+        <div class="info-item-icon">📧</div>
+        <div class="info-item-text">
+          <div class="label">Email</div>
+          <div class="value"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0a797f7a7a65787e4a396b66676f6679626b686b6824696567">[email&#160;protected]</a></div>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <div class="info-item-icon">📞</div>
+        <div class="info-item-text">
+          <div class="label">Phone</div>
+          <div class="value">+20 100 000 0000</div>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <div class="info-item-icon">📍</div>
+        <div class="info-item-text">
+          <div class="label">Location</div>
+          <div class="value">Mansoura, Egypt</div>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <div class="info-item-icon">🕐</div>
+        <div class="info-item-text">
+          <div class="label">وقت الرد</div>
+          <div class="value">خلال 24 ساعة</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-card" style="background:var(--green-glow);border-color:var(--green-border);">
+      <h3 style="color:var(--green);"><span data-i18n="حجز سريع؟">حجز سريع؟</span></h3>
+      <p style="font-size:0.84rem;color:var(--text-dim);margin-bottom:16px;line-height:1.6;">
+        تخطَّ الانتظار — تصفح الملاعب المتاحة واحجز الآن فوراً.
+      </p>
+      <a href="booking.html" class="btn-primary" style="display:block;text-align:center;">تصفح الملاعب →</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-brand">⚽ 3ALM ELSHABAB</span>
+  <span>© 2026 — All Rights Reserved</span>
+  <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d3a0a6a3a3bca1a793e0b2bfbeb6bfa0bbb2b1b2b1fdb0bcbe">[email&#160;protected]</a></span>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="i18n.js"></script>
+<script src="script.js"></script>
+<script>
+  function sendالرسالة() {
+    const name = document.getElementById('c-name').value;
+    const email = document.getElementById('c-email').value;
+    const msg = document.getElementById('c-msg').value;
+    if (!name || !email || !msg) {
+      alert('Please fill in all fields before sending.');
+      return;
+    }
+    // Simulate sending message (replace with actual API call)
+    setTimeout(() => {
+      document.getElementById('successMsg').style.display = 'block';
+      document.getElementById('c-name').value = '';
+      document.getElementById('c-email').value = '';
+      document.getElementById('c-msg').value = '';
+    }, 1000);
+  } 
+  function updateSummary() {
+    const selOpt = document.getElementById('stadium').selectedOptions[0];
+    const date = document.getElementById('date').value;
+    const time = document.getElementById('time').value;
+    const hours = document.getElementById('hours').value;
+    const total = hours ? (hours * 100) : 0; // Assuming 100 EGP per hour
+  }
+</script>
+
+<script>
+  /* ── Mobile Sidebar Toggle ── */
+  function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const btn     = document.getElementById('mobileMenuBtn');
+    if (!sidebar) return;
+    const isOpen = sidebar.classList.toggle('open');
+    if (overlay) overlay.classList.toggle('active', isOpen);
+    if (btn)     btn.classList.toggle('open', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  }
+
+  function closeSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const btn     = document.getElementById('mobileMenuBtn');
+    if (sidebar) sidebar.classList.remove('open');
+    if (overlay) overlay.classList.remove('active');
+    if (btn)     btn.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  /* Mark active bottom nav item */
+  document.addEventListener('DOMContentLoaded', function() {
+    const page = window.location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('.bottom-nav-item[href]').forEach(function(a) {
+      if (a.getAttribute('href') === page) a.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>

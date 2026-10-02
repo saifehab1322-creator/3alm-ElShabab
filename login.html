@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تسجيل الدخول — عالم الشباب</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css">
+
+ 
+  <style>
+    .auth-page {
+      position: relative; z-index: 1;
+      min-height: calc(100vh 
+• var(--nav-h));
+      display: flex; align-items: center; justify-content: center;
+      padding: 60px 20px;
+    }
+
+    .auth-page::before {
+      content: '';
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,230,118,0.06) 0%, transparent 70%);
+    }
+
+    .auth-card {
+      position: relative;
+      width: 100%; max-width: 460px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .auth-card-top {
+      padding: 36px 36px 28px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,230,118,0.03);
+      text-align: center;
+    }
+
+    .auth-icon {
+      width: 64px; height: 64px;
+      background: var(--green-glow);
+      border: 1px solid var(--green-border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+      margin: 0 auto 20px;
+    }
+
+    .auth-card-top h1 {
+      font-family: var(--font-display);
+      font-size: 1.8rem; font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .auth-card-top p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* ── Login Type Selector ── */
+    .login-type-selector {
+      display: flex;
+      gap: 0;
+      margin-bottom: 4px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .login-type-btn {
+      flex: 1;
+      padding: 12px 10px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      letter-spacing: 0.3px;
+    }
+
+    .login-type-btn .btn-icon { font-size: 1.4rem; }
+
+    .login-type-btn.active {
+      background: rgba(0,230,118,0.12);
+      color: var(--green, #00e676);
+      border-bottom: 2px solid var(--green, #00e676);
+    }
+
+    .login-type-btn:hover:not(.active) {
+      background: rgba(255,255,255,0.04);
+      color: var(--text, #fff);
+    }
+
+    .login-type-separator {
+      width: 1px;
+      background: var(--border);
+      align-self: stretch;
+    }
+
+    /* ── Owner badge ── */
+    .owner-badge {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,165,0,0.08);
+      border: 1px solid rgba(255,165,0,0.25);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.8rem;
+      color: #ffb347;
+    }
+
+    .owner-badge.visible { display: flex; }
+
+    .auth-form {
+      padding: 28px 36px 32px;
+      display: flex; flex-direction: column; gap: 18px;
+    }
+
+    .auth-divider {
+      display: flex; align-items: center; gap: 14px;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .auth-divider::before, .auth-divider::after {
+      content: ''; flex: 1; height: 1px;
+      background: var(--border);
+    }
+
+    .auth-footer {
+      padding: 20px 36px;
+      border-top: 1px solid var(--border);
+      background: var(--bg3);
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .auth-footer a {
+      color: var(--green);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .auth-footer a:hover { text-decoration: underline; }
+
+    /* ── Sign In button variants ── */
+    .btn-owner {
+      padding: 16px;
+      background: linear-gradient(135deg, #ff8c00, #e65c00);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius, 8px);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-owner:hover { opacity: 0.88; }
+
+    #btn-user-signin  { display: flex; }
+    #btn-owner-signin { display: none; }
+  </style>
+</head>
+<body>
+  <!-- ════ MOBILE OVERLAY ════ -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <!-- ════ MOBILE HAMBURGER ════ -->
+  <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleSidebar()" aria-label="القائمة">
+    <span></span><span></span><span></span>
+  </button>
+
+  <!-- ════ MOBILE BOTTOM NAV ════ -->
+  <nav class="mobile-bottom-nav">
+    <div class="bottom-nav-items">
+      <a href="index.html" class="bottom-nav-item">
+        <i class="fa-solid fa-house"></i>
+        <span>الرئيسية</span>
+      </a>
+      <a href="stadium.html" class="bottom-nav-item">
+        <i class="fa-solid fa-futbol"></i>
+        <span>الملاعب</span>
+      </a>
+      <a href="booking.html" class="bottom-nav-item">
+        <i class="fa-regular fa-calendar-check"></i>
+        <span>الحجز</span>
+      </a>
+      <a href="my-booking.html" class="bottom-nav-item">
+        <i class="fa-solid fa-calendar-days"></i>
+        <span>حجوزاتي</span>
+      </a>
+      <button class="bottom-nav-item" onclick="toggleSidebar()">
+        <i class="fa-solid fa-bars"></i>
+        <span>المزيد</span>
+      </button>
+    </div>
+  </nav>
+
+
+        <!-- ════ SIDEBAR ════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <i class="fa-solid fa-futbol" style="color:#0a0f0d;"></i>
+      </div>
+      <div class="logo-text">
+        3ALM ELSHABAB
+        <span>منصة حجز الملاعب</span>
+      </div>
+    </div>
+
+    <span class="nav-section-label" data-i18n="القائمة">القائمة</span>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="index.html"><i class="fa-solid fa-house"></i> <span data-i18n="الرئيسية">الرئيسية</span></a></li>
+      <li class="nav-item"><a href="stadium.html"><i class="fa-solid fa-futbol"></i> <span data-i18n="الملاعب">الملاعب</span></a></li>
+      <li class="nav-item"><a href="booking.html"><i class="fa-regular fa-calendar-check"></i> <span data-i18n="الحجز">الحجز</span></a></li>
+    </ul>
+
+    <span class="nav-section-label" data-i18n="الحساب" style="margin-top:8px;">الحساب</span>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="profile.html"><i class="fa-regular fa-user"></i> <span data-i18n="حسابي">حسابي</span></a></li>
+      <li class="nav-item"><a href="my-booking.html"><i class="fa-solid fa-calendar-days"></i> <span data-i18n="حجوزاتي">حجوزاتي</span></a></li>
+      <li class="nav-item"><a href="login.html"><i class="fa-solid fa-right-to-bracket"></i> <span data-i18n="تسجيل الدخول">تسجيل الدخول</span></a></li>
+      <li class="nav-item"><a href="contact.html"><i class="fa-regular fa-envelope"></i> <span data-i18n="تواصل">تواصل</span></a></li>
+      <li class="nav-item"><a href="about.html"><i class="fa-solid fa-circle-info"></i> <span data-i18n="عنا">عنا</span></a></li>
+    </ul>
+
+    <div style="margin-top:auto;display:flex;flex-direction:column;gap:8px;">
+      <!-- Language Toggle -->
+      <button class="theme-toggle" onclick="toggleLang()" style="width:100%;cursor:pointer;">
+        <div class="theme-toggle-label">
+          <span style="font-size:1rem;">🌐</span>
+          <span class="lang-toggle-text">English</span>
+        </div>
+        <div style="font-size:0.65rem;opacity:0.6;letter-spacing:1px;">AR / EN</div>
+      </button>
+
+      <!-- Theme Toggle -->
+      <button class="theme-toggle" onclick="toggleTheme()" style="width:100%;cursor:pointer;">
+        <div class="theme-toggle-label">
+          <span class="theme-toggle-icon">🌙</span>
+          <span class="theme-toggle-text" data-i18n="الوضع النهاري">الوضع النهاري</span>
+        </div>
+        <div class="theme-toggle-switch"></div>
+      </button>
+    </div>
+  </aside>
+
+
+
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-card-top">
+      <div class="auth-icon">🔐</div>
+      <h1><span data-i18n="أهلاً بعودتك">أهلاً بعودتك</span></h1>
+      <p>سجّل دخولك إلى حسابك</p>
+    </div>
+
+    <div class="auth-form">
+
+      <!-
+• ── Login Type Toggle ── -->
+      <div class="login-type-selector">
+        <button class="login-type-btn active" id="btn-type-user" onclick="setLoginType('user')">
+          <span class="btn-icon">👤</span>
+          مستخدم
+        </button>
+        <div class="login-type-separator"></div>
+        <button class="login-type-btn" id="btn-type-owner" onclick="setLoginType('owner')">
+          <span class="btn-icon">🏟️</span>
+          صاحب ملعب
+        </button>
+      </div>
+
+      <!-
+• Owner notice -->
+      <div class="owner-badge" id="owner-badge">
+        🔑 &nbsp;ستُحوَّل إلى لوحة إدارة الملاعب بعد تسجيل الدخول
+      </div>
+
+      <div class="form-group">
+        <label>اسم المستخدم</label>
+        <input type="text" id="login-username" placeholder="أدخل اسم المستخدم" required>
+      </div>
+
+      <div class="form-group">
+        <label>كلمة السر</label>
+        <input type="password" id="login-password" placeholder="أدخل كلمة السر" required>
+      </div>
+
+      <!-
+• User Sign In -->
+      <button class="btn-primary" id="btn-user-signin"
+        style="padding:16px; justify-content:center;"
+        onclick="loginAs('user')">
+        تسجيل الدخول →
+      </button>
+
+      <!-
+• Owner Sign In -->
+      <button class="btn-owner" id="btn-owner-signin" onclick="loginAs('owner')">
+        🏟️ &nbsp;دخول لوحة الإدارة →
+      </button>
+
+    </div>
+
+    <div class="auth-footer">
+      ليس لديك حساب؟ <a href="register.html">سجّل الآن</a>
+    </div>
+  </div>
+</div>
+
+<!-
+• FOOTER -->
+<footer>
+  <span class="footer-brand">⚽ 3ALM ELSHABAB</span>
+  <span>© 2026 — All Rights Reserved</span>
+</footer>
+  <script src="i18n.js"></script>
+<script src="script.js"></script>
+<script>
+  let currentLoginType = 'user';
+
+  function setLoginType(type) {
+    currentLoginType = type;
+    document.getElementById('btn-type-user').classList.toggle('active', type === 'user');
+    document.getElementById('btn-type-owner').classList.toggle('active', type === 'owner');
+    document.getElementById('owner-badge').classList.toggle('visible', type === 'owner');
+    document.getElementById('btn-user-signin').style.display  = type === 'user'  ? 'flex'  : 'none';
+    document.getElementById('btn-owner-signin').style.display = type === 'owner' ? 'block' : 'none';
+  }
+
+  function loginAs(type) {
+    const username = document.getElementById('login-username').value.trim();
+    const password = document.getElementById('login-password').value.trim();
+
+    if (!username || !password) {
+      alert('من فضلك ادخل اليوزر والباسورد');
+      return;
+    }
+
+    if (type === 'owner') {
+      localStorage.setItem('currentUser', username);
+      localStorage.setItem('userRole', 'owner');
+      window.location.href = 'admin.html';
+    } else {
+      if (typeof login === 'function') {
+        login(username, password);
+      } else {
+        localStorage.setItem('currentUser', username);
+        localStorage.setItem('userRole', 'user');
+        window.location.href = 'index.html';
+      }
+    }
+  }
+</script>
+
+
+<script>
+  /* ── Mobile Sidebar Toggle ── */
+  function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const btn     = document.getElementById('mobileMenuBtn');
+    if (!sidebar) return;
+    const isOpen = sidebar.classList.toggle('open');
+    if (overlay) overlay.classList.toggle('active', isOpen);
+    if (btn)     btn.classList.toggle('open', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  }
+
+  function closeSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const btn     = document.getElementById('mobileMenuBtn');
+    if (sidebar) sidebar.classList.remove('open');
+    if (overlay) overlay.classList.remove('active');
+    if (btn)     btn.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  /* Mark active bottom nav item */
+  document.addEventListener('DOMContentLoaded', function() {
+    const page = window.location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('.bottom-nav-item[href]').forEach(function(a) {
+      if (a.getAttribute('href') === page) a.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>

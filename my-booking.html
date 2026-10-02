@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>حجوزاتي — عالم الشباب</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .page-header {
+      position: relative; z-index: 1;
+      max-width: 900px; margin: 0 auto;
+      padding: 72px 40px 0;
+      display: flex; align-items: flex-end; justify-content: space-between;
+      flex-wrap: wrap; gap: 20px;
+    }
+
+    .page-header h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 800;
+      line-height: 0.95;
+    }
+
+    .page-header h1 em { font-style: normal; color: var(--green); }
+
+    .stats-row {
+      position: relative; z-index: 1;
+      max-width: 900px; margin: 0 auto;
+      padding: 40px 40px 0;
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+    }
+
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 2.4rem; font-weight: 800;
+      color: var(--green); line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .stat-desc {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .tabs-bar {
+      position: relative; z-index: 1;
+      max-width: 900px; margin: 0 auto;
+      padding: 32px 40px 0;
+      display: flex; gap: 8px;
+    }
+
+    .tab {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 9px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .tab:hover, .tab.active {
+      border-color: var(--green);
+      color: var(--green);
+      background: var(--green-glow);
+    }
+
+    .bookings-list {
+      position: relative; z-index: 1;
+      max-width: 900px; margin: 0 auto;
+      padding: 28px 40px 100px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+
+    .b-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color var(--transition), transform var(--transition);
+    }
+
+    .b-card:hover { border-color: rgba(0,230,118,0.3); transform: translateY(-2px); }
+    .b-card.confirmed { border-left: 3px solid var(--green); }
+    .b-card.pending   { border-left: 3px solid var(--yellow); }
+    .b-card.cancelled { border-left: 3px solid var(--red); opacity: 0.5; }
+
+    .b-inner {
+      display: grid;
+      grid-template-columns: 80px 1fr auto;
+      align-items: center;
+      gap: 24px;
+      padding: 24px 28px;
+    }
+
+    .date-block {
+      width: 80px; height: 80px;
+      background: var(--green-glow);
+      border: 1px solid var(--green-border);
+      border-radius: var(--radius-sm);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .date-block .month {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--green);
+    }
+
+    .date-block .day {
+      font-family: var(--font-display);
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: var(--green);
+      line-height: 1.1;
+    }
+
+    
+
+    .b-name {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .b-meta {
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+
+    .meta-pill {
+      background: var(--bg3);
+      border: 1px solid var(--border-light);
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    .b-actions {
+      display: flex; flex-direction: column;
+      align-items: flex-end; gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .btn-cancel {
+      background: transparent;
+      border: 1px solid rgba(255,82,82,0.25);
+      color: var(--red);
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 7px 16px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-cancel:hover {
+      background: rgba(255,82,82,0.1);
+      border-color: rgba(255,82,82,0.5);
+    }
+
+    .empty-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 40px;
+      background: var(--card);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+    }
+
+    .empty-state.show { display: flex; }
+
+    .empty-state h2 {
+      font-family: var(--font-display);
+      font-size: 1.8rem; font-weight: 800;
+      color: var(--text-muted);
+      margin: 16px 0 8px;
+    }
+
+    .empty-state p { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 28px; }
+
+    @media (max-width: 700px) {
+      .b-inner { grid-template-columns: 1fr; gap: 16px; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .page-header, .stats-row, .tabs-bar, .bookings-list { padding-left: 20px; padding-right: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- ════ MOBILE OVERLAY ════ -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <!-- ════ MOBILE HAMBURGER ════ -->
+  <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleSidebar()" aria-label="القائمة">
+    <span></span><span></span><span></span>
+  </button>
+
+  <!-- ════ MOBILE BOTTOM NAV ════ -->
+  <nav class="mobile-bottom-nav">
+    <div class="bottom-nav-items">
+      <a href="index.html" class="bottom-nav-item">
+        <i class="fa-solid fa-house"></i>
+        <span>الرئيسية</span>
+      </a>
+      <a href="stadium.html" class="bottom-nav-item">
+        <i class="fa-solid fa-futbol"></i>
+        <span>الملاعب</span>
+      </a>
+      <a href="booking.html" class="bottom-nav-item">
+        <i class="fa-regular fa-calendar-check"></i>
+        <span>الحجز</span>
+      </a>
+      <a href="my-booking.html" class="bottom-nav-item">
+        <i class="fa-solid fa-calendar-days"></i>
+        <span>حجوزاتي</span>
+      </a>
+      <button class="bottom-nav-item" onclick="toggleSidebar()">
+        <i class="fa-solid fa-bars"></i>
+        <span>المزيد</span>
+      </button>
+    </div>
+  </nav>
+
+
+
+        <!-- ════ SIDEBAR ════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <i class="fa-solid fa-futbol" style="color:#0a0f0d;"></i>
+      </div>
+      <div class="logo-text">
+        3ALM ELSHABAB
+        <span>منصة حجز الملاعب</span>
+      </div>
+    </div>
+
+    <span class="nav-section-label" data-i18n="القائمة">القائمة</span>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="index.html"><i class="fa-solid fa-house"></i> <span data-i18n="الرئيسية">الرئيسية</span></a></li>
+      <li class="nav-item"><a href="stadium.html"><i class="fa-solid fa-futbol"></i> <span data-i18n="الملاعب">الملاعب</span></a></li>
+      <li class="nav-item"><a href="booking.html"><i class="fa-regular fa-calendar-check"></i> <span data-i18n="الحجز">الحجز</span></a></li>
+    </ul>
+
+    <span class="nav-section-label" data-i18n="الحساب" style="margin-top:8px;">الحساب</span>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="profile.html"><i class="fa-regular fa-user"></i> <span data-i18n="حسابي">حسابي</span></a></li>
+      <li class="nav-item"><a href="my-booking.html"><i class="fa-solid fa-calendar-days"></i> <span data-i18n="حجوزاتي">حجوزاتي</span></a></li>
+      <li class="nav-item"><a href="login.html"><i class="fa-solid fa-right-to-bracket"></i> <span data-i18n="تسجيل الدخول">تسجيل الدخول</span></a></li>
+      <li class="nav-item"><a href="contact.html"><i class="fa-regular fa-envelope"></i> <span data-i18n="تواصل">تواصل</span></a></li>
+      <li class="nav-item"><a href="about.html"><i class="fa-solid fa-circle-info"></i> <span data-i18n="عنا">عنا</span></a></li>
+    </ul>
+
+    <div style="margin-top:auto;display:flex;flex-direction:column;gap:8px;">
+      <!-- Language Toggle -->
+      <button class="theme-toggle" onclick="toggleLang()" style="width:100%;cursor:pointer;">
+        <div class="theme-toggle-label">
+          <span style="font-size:1rem;">🌐</span>
+          <span class="lang-toggle-text">English</span>
+        </div>
+        <div style="font-size:0.65rem;opacity:0.6;letter-spacing:1px;">AR / EN</div>
+      </button>
+
+      <!-- Theme Toggle -->
+      <button class="theme-toggle" onclick="toggleTheme()" style="width:100%;cursor:pointer;">
+        <div class="theme-toggle-label">
+          <span class="theme-toggle-icon">🌙</span>
+          <span class="theme-toggle-text" data-i18n="الوضع النهاري">الوضع النهاري</span>
+        </div>
+        <div class="theme-toggle-switch"></div>
+      </button>
+    </div>
+  </aside>
+
+
+
+<!-- HEADER -->
+<div class="page-header">
+  <div>
+    <p class="section-label"><span data-i18n="لوحة التحكم">لوحة التحكم</span></p>
+    <h1>MY <em>حجوزاتي</em></h1>
+  </div>
+  <a href="booking.html" class="btn-primary"><span data-i18n="+ حجز جديد">+ حجز جديد</span></a>
+</div>
+
+<!-- STATS -->
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-num">2</div>
+    <div class="stat-desc"><span data-i18n="إجمالي الحجوزات">إجمالي الحجوزات</span></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">1</div>
+    <div class="stat-desc">مؤكدة</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">250</div>
+    <div class="stat-desc"><span data-i18n="جنيه مُنفَق">جنيه مُنفَق</span></div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <button class="tab active" onclick="filterTab(this,'all')"><span data-i18n="الكل">الكل</span></button>
+  <button class="tab" onclick="filterTab(this,'confirmed')"><span data-i18n="مؤكدة">مؤكدة</span></button>
+  <button class="tab" onclick="filterTab(this,'pending')"><span data-i18n="معلقة">معلقة</span></button>
+  <button class="tab" onclick="filterTab(this,'cancelled')"><span data-i18n="ملغاة">ملغاة</span></button>
+</div>
+
+<!-- LIST -->
+<div class="bookings-list" id="bookingsList">
+
+  <div class="b-card confirmed" data-status="confirmed">
+    <div class="b-inner">
+      <div class="date-block">
+        <span class="month">Jan</span>
+        <span class="day">01</span>
+      </div>
+      <div class="b-details">
+        <div class="b-name">🏟️ ملعب أ — النخبة</div>
+        <div class="b-meta">
+          <span class="meta-pill">⏰ 6:00 PM</span>
+          <span class="meta-pill">⏱ 2 Hours</span>
+          <span class="meta-pill">👥 10 Players</span>
+          <span class="meta-pill">💵 200 EGP</span>
+        </div>
+      </div>
+      <div class="b-actions">
+        <span class="badge badge-green"><span class="dot"></span> مؤكدة</span>
+        <button class="btn-cancel" onclick="cancelBooking(this)">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="b-card pending" data-status="pending">
+    <div class="b-inner">
+      <div class="date-block">
+        <span class="month">Jan</span>
+        <span class="day">05</span>
+      </div>
+      <div class="b-details">
+        <div class="b-name">🏟️ ملعب ب — خماسي</div>
+        <div class="b-meta">
+          <span class="meta-pill">⏰ 8:00 PM</span>
+          <span class="meta-pill">⏱ 1 Hour</span>
+          <span class="meta-pill">👥 8 Players</span>
+          <span class="meta-pill">💵 150 EGP</span>
+        </div>
+      </div>
+      <div class="b-actions">
+        <span class="badge badge-yellow"><span class="dot"></span> معلق</span>
+        <button class="btn-cancel" onclick="cancelBooking(this)">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- EMPTY STATE -->
+<div class="empty-state" id="emptyState" style="display:none;max-width:900px;margin:0 auto 80px;margin-left:40px;margin-right:40px;">
+  <span style="font-size:3.5rem;opacity:0.3;">📋</span>
+  <h2>لا توجد حجوزات بعد</h2>
+  <p>لم تقم بأي حجز بعد. احجز ملعباً للبدء.</p>
+  <a href="booking.html" class="btn-primary">احجز الآن →</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-brand">⚽ 3ALM ELSHABAB</span>
+  <span>© 2026 — All Rights Reserved</span>
+  <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ec9f999c9c839e98acdf8d808189809f848d8e8d8ec28f8381">[email&#160;protected]</a></span>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="i18n.js"></script>
+<script src="script.js"></script>
+<script>
+  function filterTab(el, status) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    const cards = document.querySelectorAll('.b-card');
+    let visible = 0;
+    cards.forEach(card => {
+      const show = status === 'all' || card.dataset.status === status;
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    const emptyState = document.getElementById('emptyState');
+    if (emptyState) emptyState.style.display = visible === 0 ? 'flex' : 'none';
+  }
+
+  function cancelBooking(btn) {
+    const card = btn.closest('.b-card');
+    if (confirm('هل تريد إلغاء هذا الحجز؟')) {
+      card.style.opacity = '0';
+      card.style.transform = 'translateX(20px)';
+      card.style.transition = 'all 0.3s ease';
+      setTimeout(() => {
+        card.remove();
+        checkEmpty();
+      }, 300);
+    }
+  }
+
+  function checkEmpty() {
+    const cards = document.querySelectorAll('.b-card');
+    const visible = [...cards].filter(c => c.style.display !== 'none').length;
+    const emptyState = document.getElementById('emptyState');
+    if (emptyState) {
+      emptyState.style.display = visible === 0 ? 'flex' : 'none';
+    }
+    // Update stats
+    const all = document.querySelectorAll('.b-card').length;
+    const confirmed = document.querySelectorAll('.b-card.confirmed').length;
+    const statNums = document.querySelectorAll('.stat-num');
+    if (statNums[0]) statNums[0].textContent = all;
+    if (statNums[1]) statNums[1].textContent = confirmed;
+    // Recalc EGP spent
+    let spent = 0;
+    document.querySelectorAll('.b-card:not(.cancelled) .meta-pill').forEach(pill => {
+      const match = pill.textContent.match(/(\d+)\s*EGP/);
+      if (match) spent += parseInt(match[1]);
+    });
+    if (statNums[2]) statNums[2].textContent = spent;
+  }
+</script>
+
+<script>
+  /* ── Mobile Sidebar Toggle ── */
+  function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const btn     = document.getElementById('mobileMenuBtn');
+    if (!sidebar) return;
+    const isOpen = sidebar.classList.toggle('open');
+    if (overlay) overlay.classList.toggle('active', isOpen);
+    if (btn)     btn.classList.toggle('open', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  }
+
+  function closeSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const btn     = document.getElementById('mobileMenuBtn');
+    if (sidebar) sidebar.classList.remove('open');
+    if (overlay) overlay.classList.remove('active');
+    if (btn)     btn.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  /* Mark active bottom nav item */
+  document.addEventListener('DOMContentLoaded', function() {
+    const page = window.location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('.bottom-nav-item[href]').forEach(function(a) {
+      if (a.getAttribute('href') === page) a.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
